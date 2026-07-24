@@ -129,18 +129,21 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 DOCS_DIR = BASE_DIR / "docs"
 
-app = web.Application()
-
 
 async def index(request):
     return web.FileResponse(DOCS_DIR / "index.html")
 
 
+async def health(request):
+    return web.Response(text="OK")
+
+
+app = web.Application()
+
 app.router.add_get("/", index)
 app.router.add_get("/health", health)
 app.router.add_get("/ws", ws_proxy)
 
-# Serve CSS, JavaScript, images, manifest.json, and other frontend files
 app.router.add_static(
     "/",
     path=str(DOCS_DIR),
