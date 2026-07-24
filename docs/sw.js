@@ -1,4 +1,4 @@
-const CACHE = 'teenmind-v1';
+const CACHE = 'teenmind-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -33,16 +33,24 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== location.origin) return;
   if (event.request.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then(
-      (cached) => cached || fetch(event.request).then((response) => {
-        // Cache any new same-origin page navigations
-        if (response.ok && event.request.mode === 'navigate') {
+  // Network-first for page navigations so updates are picked up immediately;
+  // fall back to cache when offline. Cache-first for other static assets.
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).then((response) => {
+        if (response.ok) {
           const clone = response.clone();
           caches.open(CACHE).then((cache) => cache.put(event.request, clone));
         }
         return response;
-      })
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then(
+      (cached) => cached || fetch(event.request)
     )
   );
 });

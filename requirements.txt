@@ -1,7 +1,7 @@
 # TeenMind Real-Time Voice - Dependencies
 
 # Pipecat AI Framework
-pipecat-ai[silero,deepgram,google,small-webrtc]>=0.0.65
+pipecat-ai[silero,deepgram,google,small-webrtc]==0.0.100
 
 # Environment management
 python-dotenv>=1.0.0
