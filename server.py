@@ -187,7 +187,8 @@ async def run_session():
             audio_out_sample_rate=16000,
             audio_in_sample_rate=16000,
             serializer=serializer,
-            vad_analyzer=SileroVADAnalyzer(params=VADParams(stop_secs=0.8)),
+            # Disable VAD - let Deepgram handle speech detection
+            vad_enabled=False,
         ),
         host=HOST,
         port=PORT,

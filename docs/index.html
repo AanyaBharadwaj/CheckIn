@@ -1299,13 +1299,6 @@
                     <button class="topic-chip" data-topic="just talk" aria-label="Just talk">Just talk</button>
                 </div>
 
-                <div class="transcript-card" id="transcriptCard">
-                    <div class="transcript-empty" id="transcriptEmpty">
-                        Your conversation will appear here
-                    </div>
-                    <div id="transcript"></div>
-                </div>
-
                 <button class="btn btn-red" id="btnEndConversation" aria-label="End conversation">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="6" y="4" width="4" height="16"/>
@@ -1393,9 +1386,6 @@
         const avatarEmoji = document.getElementById('avatarEmoji');
         const statusBadge = document.getElementById('statusBadge');
         const statusText = document.getElementById('statusText');
-        const transcript = document.getElementById('transcript');
-        const transcriptEmpty = document.getElementById('transcriptEmpty');
-        const transcriptCard = document.getElementById('transcriptCard');
         const audioLevelFill = document.getElementById('audioLevelFill');
         const topicChips = document.getElementById('topicChips');
         const progressDots = document.getElementById('progressDots');
@@ -1650,6 +1640,11 @@
             topicChips.classList.add('hidden');
         }
 
+        // Transcript display removed
+        function displayTranscript(text) {
+            // No-op - transcript box removed
+        }
+
         // End conversation button
         document.getElementById('btnEndConversation').addEventListener('click', () => {
             endConversation();
@@ -1659,11 +1654,7 @@
             console.log('startConversation called!');
             // Reset conversation UI
             try {
-                console.log('About to clear transcript');
-                transcript.innerHTML = '';
-                console.log('transcript cleared');
-                transcriptEmpty.style.display = '';
-                console.log('transcriptEmpty cleared');
+                // Transcript clearing removed
                 topicChips.classList.remove('hidden');
                 console.log('topicChips shown');
                 audioLevelFill.style.width = '0%';
@@ -1716,9 +1707,7 @@
             consentCheckbox.checked = false;
             btnReady.disabled = true;
 
-            // Reset transcript
-            transcript.innerHTML = '';
-            transcriptEmpty.style.display = '';
+            // Transcript reset removed
             topicChips.classList.remove('hidden');
 
             // Navigate back to welcome
@@ -1776,16 +1765,9 @@
             avatarEmoji.textContent = emojis[state] || '\u{1F4AD}';
         }
 
+        // Message display removed
         function addMessage(role, text) {
-            transcriptEmpty.style.display = 'none';
-
-            const div = document.createElement('div');
-            div.className = 'message ' + role;
-            const displayName = role === 'user' ? (AppState.name || 'You') : 'TeenMind';
-            div.innerHTML = '<div class="message-label">' + displayName + '</div>' +
-                '<div class="message-text">' + text + '</div>';
-            transcript.appendChild(div);
-            transcriptCard.scrollTop = transcriptCard.scrollHeight;
+            // No-op - transcript box removed
         }
 
         // =====================================================================
@@ -1926,11 +1908,21 @@
                 console.log('Received audio:', data.byteLength, 'bytes');
                 queueAudio(data);
             } else {
-                try {
-                    const message = JSON.parse(data);
-                    handleControlMessage(message);
-                } catch (e) {
-                    console.log('Message:', data);
+                // Handle text data (could be transcription)
+                const text = new TextDecoder().decode(data);
+                console.log('Received text:', text);
+
+                // Check if it's a transcription message
+                if (text.startsWith('TRANSCRIPT:')) {
+                    const transcriptText = text.replace('TRANSCRIPT:', '');
+                    displayTranscript(transcriptText);
+                } else {
+                    try {
+                        const message = JSON.parse(text);
+                        handleControlMessage(message);
+                    } catch (e) {
+                        console.log('Message:', text);
+                    }
                 }
             }
         }
@@ -1952,7 +1944,8 @@
                     updateUI('thinking', 'Thinking about what you said 💭');
                     break;
                 case 'transcription':
-                    if (message.text) addMessage('user', message.text);
+                    // Display live transcription
+                    if (message.text) displayTranscript(message.text);
                     break;
                 case 'text':
                     if (message.text) addMessage('assistant', message.text);
