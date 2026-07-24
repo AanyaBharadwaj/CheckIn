@@ -12,7 +12,7 @@ health check requirements.
 
 import asyncio
 import os
-
+from pathlib import Path
 import aiohttp
 from aiohttp import web
 import websockets
@@ -24,8 +24,12 @@ INTERNAL_WS_PORT = 8765
 
 # --- HTTP health check ---
 
-async def health(request):
-    return web.Response(text="OK")
+from pathlib import Path
+
+DOCS = Path(__file__).parent / "docs"
+
+async def index(request):
+    return web.FileResponse(DOCS / "index.html")
 
 
 # --- WebSocket proxy to internal pipecat server ---
@@ -118,13 +122,31 @@ async def on_cleanup(app):
     except asyncio.CancelledError:
         pass
 
+from pathlib import Path
 
 # --- App setup ---
 
+BASE_DIR = Path(__file__).resolve().parent
+DOCS_DIR = BASE_DIR / "docs"
+
 app = web.Application()
-app.router.add_get("/", health)
+
+
+async def index(request):
+    return web.FileResponse(DOCS_DIR / "index.html")
+
+
+app.router.add_get("/", index)
 app.router.add_get("/health", health)
 app.router.add_get("/ws", ws_proxy)
+
+# Serve CSS, JavaScript, images, manifest.json, and other frontend files
+app.router.add_static(
+    "/",
+    path=str(DOCS_DIR),
+    show_index=False,
+)
+
 app.on_startup.append(on_startup)
 app.on_cleanup.append(on_cleanup)
 
