@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# TeenMind Real-Time Voice Server Launcher
+# CheckIn Real-Time Voice Server Launcher
 
 echo "================================"
-echo "  TeenMind Real-Time Voice"
+echo "  CheckIn Real-Time Voice"
 echo "================================"
 echo ""
 

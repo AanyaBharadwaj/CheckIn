@@ -102,12 +102,12 @@ def get_ai_response(user_message: str, conversation_history: list) -> Tuple[Opti
         # Build context from history
         context_messages = []
         for msg in conversation_history[-6:]:  # Last 6 messages for context
-            role = "User" if msg['role'] == 'user' else "TeenMind"
+            role = "User" if msg['role'] == 'user' else "CheckIn"
             context_messages.append(f"{role}: {msg['content']}")
 
         context = "\n".join(context_messages) if context_messages else ""
 
-        prompt = f"""You are TeenMind, a supportive and empathetic companion for teenagers.
+        prompt = f"""You are CheckIn, a supportive and empathetic companion for teenagers.
 
 IMPORTANT RULES:
 - Keep responses SHORT (1-3 sentences max) - this is a voice conversation
@@ -218,7 +218,7 @@ def render_realtime_conversation_ui():
             else:
                 convo_html += f'''
                 <div class="msg-bubble ai-msg">
-                    <div class="msg-label">TeenMind</div>
+                    <div class="msg-label">CheckIn</div>
                     {msg['content']}
                 </div>'''
         convo_html += '</div>'

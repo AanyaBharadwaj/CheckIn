@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-TeenMind Companion - Test Suite
+CheckIn Companion - Test Suite
 
 Run with: python test_app.py
 
@@ -328,7 +328,7 @@ def test_prompts():
 def run_tests():
     """Run all tests."""
     print("\n" + "="*60)
-    print("  TeenMind Companion - Test Suite")
+    print("  CheckIn Companion - Test Suite")
     print("="*60)
 
     # Check dependencies first

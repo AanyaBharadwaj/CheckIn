@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a1a"/>
+      <stop offset="50%" stop-color="#1a1a3e"/>
+      <stop offset="100%" stop-color="#0d1f2d"/>
+    </linearGradient>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- App background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- Brain outline — two hemispheres -->
+  <g fill="none" stroke="url(#grad)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Left hemisphere -->
+    <path d="M256 170
+      C256 170 210 160 188 185
+      C165 210 162 240 172 265
+      C180 285 170 305 180 320
+      C192 338 218 342 234 332
+      C244 326 256 326 256 326"/>
+    <!-- Right hemisphere -->
+    <path d="M256 170
+      C256 170 302 160 324 185
+      C347 210 350 240 340 265
+      C332 285 342 305 332 320
+      C320 338 294 342 278 332
+      C268 326 256 326 256 326"/>
+    <!-- Center divide -->
+    <line x1="256" y1="174" x2="256" y2="322"/>
+    <!-- Left lobe details -->
+    <path d="M196 220 C185 228 182 248 192 258"/>
+    <path d="M185 275 C178 285 182 300 192 308"/>
+    <!-- Right lobe details -->
+    <path d="M316 220 C327 228 330 248 320 258"/>
+    <path d="M327 275 C334 285 330 300 320 308"/>
+  </g>
+
+  <!-- Subtle glow dot at top -->
+  <circle cx="256" cy="148" r="12" fill="#6ee7b7" opacity="0.6"/>
+</svg>

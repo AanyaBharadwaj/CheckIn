@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: teenmind
+    name: checkin
     runtime: docker
     dockerContext: .
     dockerfilePath: ./Dockerfile

@@ -1,4 +1,4 @@
-# TeenMind Real-Time Voice - Dependencies
+# CheckIn Real-Time Voice - Dependencies
 
 # Pipecat AI Framework
 pipecat-ai[silero,deepgram,google,small-webrtc]==0.0.100

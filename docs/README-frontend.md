@@ -1,6 +1,6 @@
-# TeenMind Frontend
+# CheckIn Frontend
 
-This is the frontend for the TeenMind voice companion application.
+This is the frontend for the CheckIn voice companion application.
 
 ## Deployment
 

@@ -1,4 +1,4 @@
-# TeenMind Real-Time Voice Companion
+# CheckIn Real-Time Voice Companion
 
 A real-time voice conversation system for teen mental health support.
 Built with Pipecat, Deepgram, and Gemini.
@@ -52,7 +52,7 @@ Then open http://localhost:8080
 
 ## User Flow
 
-1. **Welcome** — Landing page with TeenMind branding
+1. **Welcome** — Landing page with CheckIn branding
 2. **Profile** — Enter name, select age (13–19), pick mood
 3. **Disclaimer** — Consent checkbox (not a therapist, conversations not stored)
 4. **Greeting** — Animated "Hi {name}!" adapts to mood

@@ -1,5 +1,5 @@
 """
-TeenMind Cloud Server — Render-compatible entry point.
+CheckIn Cloud Server — Render-compatible entry point.
 
 Runs an aiohttp server on PORT that:
   1. Responds to HTTP health checks (GET/HEAD) with 200 OK
@@ -154,5 +154,5 @@ app.on_startup.append(on_startup)
 app.on_cleanup.append(on_cleanup)
 
 if __name__ == "__main__":
-    logger.info(f"TeenMind cloud server starting on port {RENDER_PORT}")
+    logger.info(f"CheckIn cloud server starting on port {RENDER_PORT}")
     web.run_app(app, host="0.0.0.0", port=RENDER_PORT)

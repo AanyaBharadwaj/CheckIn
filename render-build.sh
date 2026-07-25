@@ -1,7 +1,7 @@
 #!/bin/bash
-# Render build script for TeenMind
+# Render build script for CheckIn
 
-echo "Building TeenMind for Render..."
+echo "Building CheckIn for Render..."
 
 # Install dependencies
 pip install --no-cache-dir -r requirements.txt

@@ -1,4 +1,4 @@
-const CACHE = 'teenmind-v2';
+const CACHE = 'checkin-v2';
 const ASSETS = [
   './',
   './index.html',

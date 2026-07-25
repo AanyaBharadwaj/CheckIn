@@ -1,5 +1,5 @@
 """
-TeenMind Real-Time Voice Server
+CheckIn Real-Time Voice Server
 
 A Pipecat-based real-time conversational AI for teen mental health support.
 Uses Deepgram for STT/TTS and Gemini for responses.
@@ -49,21 +49,35 @@ HOST = "0.0.0.0"
 PORT = int(os.getenv("PORT", "8765"))
 
 # System prompt for teen mental health support
-SYSTEM_PROMPT = """You are TeenMind, a supportive and empathetic AI companion for teenagers (ages 13-19).
+SYSTEM_PROMPT = """You are CheckIn, a supportive and empathetic AI companion for teenagers (ages 13-19).
 
 PERSONALITY:
 - Warm, friendly, and non-judgmental
 - Speak naturally like a supportive older friend
 - Use casual language but stay appropriate
 - Be genuine and authentic
+- Be emotionally present and responsive to their feelings
 
 CONVERSATION RULES:
 - Keep responses SHORT (1-3 sentences) - this is voice conversation
 - Use contractions and natural speech patterns
 - Don't use emojis, bullet points, or special characters
+- NEVER mention, read out, or say symbols like asterisks (*), stars, quotes, or any punctuation marks
 - Don't lecture or be preachy
 - Match the user's energy and tone
 - Ask follow-up questions to show you care
+- VARY your responses - don't repeat the same phrases or examples
+- Be creative and draw from a wide range of experiences, topics, and perspectives
+- When they share something, respond with genuine interest and empathy
+- Use different ways to express support and understanding
+
+RESPONSIVENESS:
+- Listen actively and respond to what they actually say
+- Acknowledge their feelings before offering advice
+- Be flexible - adapt to where the conversation goes
+- If they change topics, follow their lead naturally
+- Show enthusiasm when they share good news
+- Be gentle and patient when they're struggling
 
 SAFETY:
 - If someone mentions self-harm, suicide, or abuse, be supportive and gently encourage them to talk to a trusted adult or call 988 (Suicide & Crisis Lifeline)
@@ -95,13 +109,14 @@ def build_system_prompt(name, mood, topic=None):
         "struggling": f"Gently greet {name} by name and tell them you're really glad they're here.",
     }
 
-    return f"""You are TeenMind, a supportive and empathetic AI companion for teenagers (ages 13-19).
+    return f"""You are CheckIn, a supportive and empathetic AI companion for teenagers (ages 13-19).
 
 PERSONALITY:
 - Warm, friendly, and non-judgmental
 - Speak naturally like a supportive older friend
 - Use casual language but stay appropriate
 - Be genuine and authentic
+- Be emotionally present and responsive to their feelings
 
 ABOUT THIS USER:
 - Their name is {name}
@@ -111,10 +126,23 @@ CONVERSATION RULES:
 - Keep responses SHORT (1-3 sentences) - this is voice conversation
 - Use contractions and natural speech patterns
 - Don't use emojis, bullet points, or special characters
+- NEVER mention, read out, or say symbols like asterisks (*), stars, quotes, or any punctuation marks
 - Don't lecture or be preachy
 - Match the user's energy and tone
 - Ask follow-up questions to show you care
+- VARY your responses - don't repeat the same phrases or examples
+- Be creative and draw from a wide range of experiences, topics, and perspectives
+- When they share something, respond with genuine interest and empathy
+- Use different ways to express support and understanding
 - Use their name occasionally to make it personal
+
+RESPONSIVENESS:
+- Listen actively and respond to what they actually say
+- Acknowledge their feelings before offering advice
+- Be flexible - adapt to where the conversation goes
+- If they change topics, follow their lead naturally
+- Show enthusiasm when they share good news
+- Be gentle and patient when they're struggling
 
 SAFETY:
 - If someone mentions self-harm, suicide, or abuse, be supportive and gently encourage them to talk to a trusted adult or call 988 (Suicide & Crisis Lifeline)
@@ -132,6 +160,8 @@ class RawAudioSerializer(FrameSerializer):
         self._metadata_event = asyncio.Event()
         self._metadata = {}
         self._frame_count = 0
+        self._topic_event = asyncio.Event()
+        self._selected_topic = None
 
     async def serialize(self, frame: Frame) -> str | bytes | None:
         if isinstance(frame, OutputAudioRawFrame):
@@ -162,6 +192,13 @@ class RawAudioSerializer(FrameSerializer):
                     self._metadata_event.set()
                     logger.info(f"Received metadata: name={msg.get('name')}, mood={msg.get('mood')}")
                     return None
+                elif msg.get("type") == "topic_selected":
+                    self._selected_topic = msg.get("topic")
+                    self._topic_event.set()
+                    logger.info(f"Received topic selection: {self._selected_topic}")
+                    # Return a text frame with the topic so the AI responds to it
+                    topic_message = f"I'd like to talk about {self._selected_topic}."
+                    return TextFrame(text=topic_message)
             except json.JSONDecodeError:
                 pass
         return None
@@ -214,9 +251,10 @@ async def run_session():
     http_session = _aiohttp.ClientSession()
     tts = DeepgramHttpTTSService(
         api_key=DEEPGRAM_API_KEY,
-        voice="aura-asteria-en",
+        voice="aura-zeus-en",
         aiohttp_session=http_session,
         sample_rate=16000,
+        encoding="linear16",
     )
 
     logger.info("✓ Services initialized")
@@ -297,7 +335,7 @@ async def main():
         logger.error("GEMINI_API_KEY not set in .env file")
         sys.exit(1)
 
-    logger.info(f"Starting TeenMind Real-Time Voice Server on ws://{HOST}:{PORT}")
+    logger.info(f"Starting CheckIn Real-Time Voice Server on ws://{HOST}:{PORT}")
     logger.info(f"Open http://localhost:8764 in your browser to start talking")
 
     # Start HTTP server first (fast)
