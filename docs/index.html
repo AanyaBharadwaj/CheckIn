@@ -369,6 +369,22 @@
             transform: none !important;
         }
 
+        .btn-install {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 4px 24px rgba(59, 130, 246, 0.25);
+            margin-top: 12px;
+        }
+
+        .btn-install:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-install:active:not(:disabled) {
+            transform: translateY(0) scale(0.99);
+        }
+
         .crisis-link {
             display: inline-flex;
             align-items: center;
@@ -1157,6 +1173,9 @@
             <button class="btn btn-green" id="btnGetStarted" aria-label="Get started with TeenMind">
                 Let's Talk 💙
             </button>
+            <button class="btn btn-install" id="btnInstallApp" aria-label="Install TeenMind app">
+                Install App 📱
+            </button>
         </section>
 
         <!-- Screen 2: Profile Setup -->
@@ -1768,6 +1787,79 @@
         // Message display removed
         function addMessage(role, text) {
             // No-op - transcript box removed
+        }
+
+        // =====================================================================
+        // PWA Install Handler
+        // =====================================================================
+        let deferredPrompt;
+        const installBtn = document.getElementById('btnInstallApp');
+
+        // Detect if device is iOS
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+        // Hide button if already installed as PWA
+        if (isStandalone) {
+            installBtn.style.display = 'none';
+        }
+
+        // Listen for the beforeinstallprompt event (Android, Chrome, Samsung)
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt event fired');
+            e.preventDefault();
+            deferredPrompt = e;
+            // Show the install button
+            installBtn.style.display = 'block';
+        });
+
+        // Handle install button click
+        installBtn.addEventListener('click', async () => {
+            console.log('Install button clicked');
+            
+            // iOS - show instructions
+            if (isIOS) {
+                alert('To install TeenMind on your iOS device:\n\n1. Tap the Share button (square with arrow) at the bottom of your screen\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" in the top right corner\n\nThe app will be added to your home screen!');
+                return;
+            }
+            
+            // Android/Chrome/Samsung - use native prompt
+            if (!deferredPrompt) {
+                console.log('No deferred prompt available');
+                alert('To install TeenMind:\n\n1. Look for the "Install" or "Add to Home Screen" option in your browser menu\n2. Tap it to install the app');
+                return;
+            }
+
+            // Show the install prompt
+            deferredPrompt.prompt();
+            
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response: ${outcome}`);
+
+            // Hide the button regardless of the outcome
+            installBtn.style.display = 'none';
+            deferredPrompt = null;
+        });
+
+        // Listen for app installed event
+        window.addEventListener('appinstalled', () => {
+            console.log('App installed successfully');
+            installBtn.style.display = 'none';
+            deferredPrompt = null;
+        });
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registration successful:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
         }
 
         // =====================================================================
