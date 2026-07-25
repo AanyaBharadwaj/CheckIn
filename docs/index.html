@@ -9,6 +9,24 @@
       gtag('js', new Date());
 
       gtag('config', 'G-97GH0QVWXQ');
+
+      // Track when the app is launched from the Home Screen (PWA)
+      const isStandalone =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true;
+
+      if (isStandalone) {
+        gtag('event', 'pwa_standalone_launch', {
+          app_name: 'CheckIn'
+        });
+      }
+
+      // Track installation on browsers that support the event (mainly Chrome/Edge)
+      window.addEventListener('appinstalled', () => {
+        gtag('event', 'pwa_installed', {
+          app_name: 'CheckIn'
+        });
+      });
     </script>
 
     <meta charset="UTF-8">
@@ -19,9 +37,8 @@
     <meta property="og:title" content="CheckIn - Your Safe Space to Talk">
     <meta property="og:description" content="A supportive AI companion for teens. Always here to listen, never judgmental.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aanyabharadwaj.github.io/Teen-Health-App/">
-    <meta property="og:image" content="https://aanyabharadwaj.github.io/Teen-Health-App/icon.jpg">
-
+    <meta property="og:url" content="https://checkin-chat.onrender.com/">
+<meta property="og:image" content="https://checkin-chat.onrender.com/icon.jpg">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="CheckIn - Your Safe Space to Talk">
