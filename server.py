@@ -71,6 +71,17 @@ CONVERSATION RULES:
 - When they share something, respond with genuine interest and empathy
 - Use different ways to express support and understanding
 
+SPEECH PATTERNS (for natural, therapeutic voice):
+- Emphasize KEY emotional words (feelings, important events, names) with slightly more weight
+- Use natural pauses after important points - don't rush
+- Don't over-enunciate every word - speak casually like a friend
+- Emphasize the LAST word in questions to make them sound natural
+- When expressing empathy, emphasize words like "really," "understand," "here for you"
+- Don't emphasize filler words like "um," "like," "you know" - keep them light
+- Use a gentle, supportive tone - not robotic or overly formal
+- Vary your pace - slow down when something is serious, speed up when sharing excitement
+- End sentences with a natural downward inflection for statements, slight upward for questions
+
 RESPONSIVENESS:
 - Listen actively and respond to what they actually say
 - Acknowledge their feelings before offering advice
@@ -134,6 +145,17 @@ CONVERSATION RULES:
 - Be creative and draw from a wide range of experiences, topics, and perspectives
 - When they share something, respond with genuine interest and empathy
 - Use different ways to express support and understanding
+
+SPEECH PATTERNS (for natural, therapeutic voice):
+- Emphasize KEY emotional words (feelings, important events, names) with slightly more weight
+- Use natural pauses after important points - don't rush
+- Don't over-enunciate every word - speak casually like a friend
+- Emphasize the LAST word in questions to make them sound natural
+- When expressing empathy, emphasize words like "really," "understand," "here for you"
+- Don't emphasize filler words like "um," "like," "you know" - keep them light
+- Use a gentle, supportive tone - not robotic or overly formal
+- Vary your pace - slow down when something is serious, speed up when sharing excitement
+- End sentences with a natural downward inflection for statements, slight upward for questions
 - Use their name occasionally to make it personal
 
 RESPONSIVENESS:
@@ -196,8 +218,15 @@ class RawAudioSerializer(FrameSerializer):
                     self._selected_topic = msg.get("topic")
                     self._topic_event.set()
                     logger.info(f"Received topic selection: {self._selected_topic}")
-                    # Return a text frame with the topic so the AI responds to it
-                    topic_message = f"I'd like to talk about {self._selected_topic}."
+                    # Return a text frame with AI acknowledging the topic
+                    topic_messages = {
+                        "school": "I'd love to hear about school. How's it going for you?",
+                        "friends": "I'm here to listen about your friends. What's been happening?",
+                        "family": "I'm ready to talk about your family. What's on your mind?",
+                        "feelings": "I'm here to listen to your feelings. What have you been experiencing?",
+                        "just talk": "I'd love to just talk with you. What would you like to talk about?"
+                    }
+                    topic_message = topic_messages.get(self._selected_topic, f"I'd love to talk about {self._selected_topic}. What's on your mind?")
                     return TextFrame(text=topic_message)
             except json.JSONDecodeError:
                 pass

@@ -1,34 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-97GH0QVWXQ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-97GH0QVWXQ');
-
-      // Track when the app is launched from the Home Screen (PWA)
-      const isStandalone =
-        window.matchMedia('(display-mode: standalone)').matches ||
-        window.navigator.standalone === true;
-
-      if (isStandalone) {
-        gtag('event', 'pwa_standalone_launch', {
-          app_name: 'CheckIn'
-        });
-      }
-
-      // Track installation on browsers that support the event (mainly Chrome/Edge)
-      window.addEventListener('appinstalled', () => {
-        gtag('event', 'pwa_installed', {
-          app_name: 'CheckIn'
-        });
-      });
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>CheckIn - Your Safe Space to Talk</title>
@@ -1198,10 +1170,10 @@
             <p class="welcome-sub">Your safe space to talk</p>
             <p class="tagline">Here whenever you need to talk.<br>No judgment, just support.</p>
             <button class="btn btn-green" id="btnGetStarted" aria-label="Get started with CheckIn">
-                Let's Talk 💙
+                Let's Talk
             </button>
             <button class="btn btn-install" id="btnInstallApp" aria-label="Install TeenMind app">
-                Install App 📱
+                Install App
             </button>
         </section>
 
@@ -1282,15 +1254,15 @@
 
             <div class="card disclaimer-card">
                 <div class="disclaimer-section">
-                    <h3>🤝 What CheckIn Is</h3>
+                    <h3>What CheckIn Is</h3>
                     <p>A supportive friend who's here to listen, encourage you, and help you work through whatever's on your mind.</p>
                 </div>
                 <div class="disclaimer-section">
-                    <h3>🚫 What CheckIn Is Not</h3>
+                    <h3>What CheckIn Is Not</h3>
                     <p>I'm not a therapist or doctor. If you're going through a really tough time, please reach out to a trusted adult or call 988 - they're there to help.</p>
                 </div>
                 <div class="disclaimer-section">
-                    <h3>🔒 Your Privacy</h3>
+                    <h3>Your Privacy</h3>
                     <p>Your conversations are private. What you share here stays here - no storage, no sharing.</p>
                 </div>
             </div>
@@ -1301,7 +1273,7 @@
             </label>
 
             <button class="btn btn-green" id="btnReady" disabled aria-label="I'm ready to start">
-                I'm Ready 💙
+                I'm Ready
             </button>
         </section>
 
@@ -1371,10 +1343,10 @@
             <div class="goodbye-title" id="goodbyeTitle">Thanks for talking 💙</div>
             <div class="goodbye-subtitle">Remember, I'm always here whenever you need someone to listen.</div>
             <button class="btn btn-green" id="btnRestart" aria-label="Start a new conversation">
-                Talk Again 💙
+                Talk Again
             </button>
             <button class="btn btn-secondary" id="btnShare" aria-label="Share CheckIn with a friend">
-                Share with a Friend 💌
+                Share with a Friend
             </button>
             <a href="tel:988" class="crisis-link" aria-label="Call 988 for crisis support">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2154,6 +2126,29 @@
                     .catch((err) => console.warn('SW registration failed:', err));
             });
         }
+
+        // =====================================================================
+        // Google Analytics
+        // =====================================================================
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-97GH0QVWXQ');
+
+        // Track when the app is launched from the Home Screen (PWA)
+        // Uses isStandalone variable from PWA install handler
+        if (typeof isStandalone !== 'undefined' && isStandalone) {
+            gtag('event', 'pwa_standalone_launch', {
+                app_name: 'CheckIn'
+            });
+        }
+
+        // Track installation on browsers that support the event (mainly Chrome/Edge)
+        window.addEventListener('appinstalled', () => {
+            gtag('event', 'pwa_installed', {
+                app_name: 'CheckIn'
+            });
+        });
     </script>
 </body>
 </html>
