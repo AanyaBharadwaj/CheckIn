@@ -1072,6 +1072,17 @@
             text-align: center;
         }
 
+        .quiet-start {
+            width: 100%;
+            max-width: 420px;
+            margin-bottom: 16px;
+        }
+
+        .quiet-start .btn {
+            width: 100%;
+        }
+
+
         .conversation-footer .footer-text {
             font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.4);
@@ -1172,7 +1183,7 @@
             <button class="btn btn-green" id="btnGetStarted" aria-label="Get started with CheckIn">
                 Let's Talk
             </button>
-            <button class="btn btn-install" id="btnInstallApp" aria-label="Install TeenMind app">
+            <button class="btn btn-install" id="btnInstallApp" aria-label="Install CheckIn app">
                 Install App
             </button>
         </section>
@@ -1184,8 +1195,8 @@
 
             <div class="form-section">
                 <div class="input-wrapper">
-                    <input type="text" id="inputName" placeholder=" " aria-label="What's your name?" autocomplete="off" />
-                    <label for="inputName">What's your name?</label>
+                    <input type="text" id="inputName" placeholder=" " aria-label="What would you like me to call you?" autocomplete="off" />
+                    <label for="inputName">What would you like me to call you?</label>
                 </div>
             </div>
 
@@ -1247,33 +1258,62 @@
             </button>
         </section>
 
-        <!-- Screen 3: Disclaimer -->
-        <section class="screen" id="screen-disclaimer" aria-label="Disclaimer and consent">
-            <h2>Before we start 💙</h2>
-            <p class="screen-sub">Just a few things to know so we can have the best conversation.</p>
+        <!-- Screen 3: Privacy, limitations and consent -->
+        <section class="screen" id="screen-disclaimer" aria-label="Privacy, limitations and consent">
+            <h2>Before we start</h2>
+            <p class="screen-sub">
+                Here are a few things I want you to know before we talk.
+            </p>
 
             <div class="card disclaimer-card">
+
                 <div class="disclaimer-section">
-                    <h3>What CheckIn Is</h3>
-                    <p>A supportive friend who's here to listen, encourage you, and help you work through whatever's on your mind.</p>
+                    <h3>You can stay anonymous</h3>
+                    <p>
+                        You don't need to use your real name. Please don't share your
+                        full name, address, passwords, school ID, or other personal
+                        information with me.
+                    </p>
                 </div>
+
                 <div class="disclaimer-section">
-                    <h3>What CheckIn Is Not</h3>
-                    <p>I'm not a therapist or doctor. If you're going through a really tough time, please reach out to a trusted adult or call 988 - they're there to help.</p>
+                    <h3>How I work</h3>
+                    <p>
+                        I use secure technology to understand your voice and respond.
+                        I'm designed not to save your conversations in my own database,
+                        and I don't require an account.
+                    </p>
                 </div>
+
                 <div class="disclaimer-section">
-                    <h3>Your Privacy</h3>
-                    <p>Your conversations are private. What you share here stays here - no storage, no sharing.</p>
+                    <h3>What I can and can't do</h3>
+                    <p>
+                        I'm here to listen, support you, and suggest healthy coping
+                        strategies. I'm not a therapist, doctor, or emergency service.
+                    </p>
                 </div>
+
+                <div class="disclaimer-section">
+                    <h3>If you're in immediate danger</h3>
+                    <p>
+                        If you think you might hurt yourself or someone else, call 911
+                        or 988 and tell a trusted adult right away.
+                    </p>
+                </div>
+
             </div>
 
             <label class="consent-row" for="consentCheckbox">
-                <input type="checkbox" id="consentCheckbox" aria-label="I understand and want to continue" />
-                <span>I understand and I'm ready to talk</span>
+                <input
+                    type="checkbox"
+                    id="consentCheckbox"
+                    aria-label="I understand and want to continue"
+                />
+                <span>I understand and want to continue.</span>
             </label>
 
-            <button class="btn btn-green" id="btnReady" disabled aria-label="I'm ready to start">
-                I'm Ready
+            <button class="btn btn-green" id="btnReady" disabled>
+                Continue
             </button>
         </section>
 
@@ -1317,6 +1357,7 @@
                     <button class="topic-chip" data-topic="just talk" aria-label="Just talk">Just talk</button>
                 </div>
 
+        
                 <button class="btn btn-red" id="btnEndConversation" aria-label="End conversation">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="6" y="4" width="4" height="16"/>
@@ -1324,6 +1365,7 @@
                     </svg>
                     End Conversation
                 </button>
+                
             </div>
 
             <div class="conversation-footer">
@@ -1637,22 +1679,42 @@
         // Screen 5: Conversation
         // =====================================================================
 
+
         // Topic chip handlers
-        document.getElementById('topicChips').addEventListener('click', (e) => {
-            const chip = e.target.closest('.topic-chip');
-            if (!chip) return;
+        const topicChipsElement = document.getElementById('topicChips');
+        if (topicChipsElement) {
+            console.log('Topic chips element found, attaching event listener');
+            topicChipsElement.addEventListener('click', (e) => {
+                console.log('Topic chips clicked, event:', e);
+                const chip = e.target.closest('.topic-chip');
+                console.log('Chip found:', chip);
+                if (!chip) {
+                    console.log('No chip found in click target');
+                    return;
+                }
 
-            AppState.topic = chip.dataset.topic;
-            hideTopicChips();
+                AppState.topic = chip.dataset.topic;
+                console.log('Topic selected:', AppState.topic);
+                hideTopicChips();
 
-            // Send topic as a text message through WebSocket
-            if (websocket && websocket.readyState === WebSocket.OPEN) {
-                websocket.send(JSON.stringify({
-                    type: 'topic_selected',
-                    topic: AppState.topic
-                }));
-            }
-        });
+                // Send topic as a text message through WebSocket
+                if (websocket && websocket.readyState === WebSocket.OPEN) {
+                    console.log('Sending topic selection to server');
+                    websocket.send(JSON.stringify({
+                        type: 'topic_selected',
+                        topic: AppState.topic
+                    }));
+                } else {
+                    console.log('WebSocket not ready, cannot send topic selection');
+                    // Show topic chips again if WebSocket not ready
+                    setTimeout(() => {
+                        topicChips.classList.remove('hidden');
+                    }, 500);
+                }
+            });
+        } else {
+            console.error('Topic chips element not found!');
+        }
 
         function hideTopicChips() {
             topicChips.classList.add('hidden');
@@ -1818,14 +1880,14 @@
             
             // iOS - show instructions
             if (isIOS) {
-                alert('To install TeenMind on your iOS device:\n\n1. Tap the Share button (square with arrow) at the bottom of your screen\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" in the top right corner\n\nThe app will be added to your home screen!');
+                alert('To install CheckIn on your iOS device:\n\n1. Tap the Share button (square with arrow) at the bottom of your screen\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" in the top right corner\n\nThe app will be added to your home screen!');
                 return;
             }
             
             // Android/Chrome/Samsung - use native prompt
             if (!deferredPrompt) {
                 console.log('No deferred prompt available');
-                alert('To install TeenMind:\n\n1. Look for the "Install" or "Add to Home Screen" option in your browser menu\n2. Tap it to install the app');
+                alert('To install CheckIn:\n\n1. Look for the "Install" or "Add to Home Screen" option in your browser menu\n2. Tap it to install the app');
                 return;
             }
 
@@ -2032,7 +2094,7 @@
                     hideTopicChips();
                     break;
                 case 'user_stopped_speaking':
-                    updateUI('thinking', 'Thinking about what you said 💭');
+                    updateUI('thinking', 'Thinking about what you said');
                     break;
                 case 'transcription':
                     // Display live transcription
@@ -2152,3 +2214,6 @@
     </script>
 </body>
 </html>
+
+
+

@@ -9,3 +9,6 @@ COPY server.py cloud_server.py realtime_conversation.py ./
 COPY docs ./docs
 
 CMD ["python", "cloud_server.py"]
+
+
+
