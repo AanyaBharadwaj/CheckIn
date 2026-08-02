@@ -44,3 +44,6 @@ python server.py
 
 :: Clean up frontend server on exit
 taskkill /f /im python.exe /fi "WINDOWTITLE eq *http.server*" 2>nul
+
+
+

@@ -88,3 +88,6 @@ Frontend sends:                Server pipeline:
 | No microphone | Allow mic permissions in browser, use Chrome |
 | Echo/feedback | Use headphones |
 | Server won't start | Check `.env` has valid API keys |
+
+
+

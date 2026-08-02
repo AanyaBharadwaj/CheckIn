@@ -11,3 +11,6 @@ loguru>=0.7.0
 
 # Cloud deployment (HTTP + WebSocket proxy)
 aiohttp>=3.9.0
+
+
+

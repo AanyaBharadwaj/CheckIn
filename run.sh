@@ -45,3 +45,6 @@ python3 server.py
 
 # Clean up frontend server on exit
 kill $FRONTEND_PID 2>/dev/null
+
+
+

@@ -364,3 +364,6 @@ def stop_realtime_conversation():
 def is_realtime_conversation_available() -> bool:
     """Check if real-time conversation is available."""
     return bool(DEEPGRAM_API_KEY and GEMINI_API_KEY)
+
+
+
