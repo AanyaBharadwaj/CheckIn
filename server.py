@@ -363,15 +363,14 @@ async def run_session():
 
     # Initialize Deepgram TTS
     logger.info("Initializing Deepgram TTS...")
+
     http_session = _aiohttp.ClientSession()
+
     tts = DeepgramHttpTTSService(
         api_key=DEEPGRAM_API_KEY,
-        settings=DeepgramHttpTTSService.Settings(
-            voice="aura-asteria-en",
-        ),
+        voice="aura-asteria-en",
         aiohttp_session=http_session,
         sample_rate=16000,
-        encoding="linear16",
     )
 
     logger.info("✓ Services initialized")
