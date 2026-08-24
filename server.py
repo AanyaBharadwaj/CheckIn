@@ -418,7 +418,7 @@ async def run_session():
                     "male": "aura-orion-en",
                 }
                 if voice in VOICE_MAP:
-                    tts._settings.voice = VOICE_MAP[voice]
+                    tts.set_voice(VOICE_MAP[voice])
 
                 personalized = build_system_prompt(name, mood, topic)
                 context.set_messages([{"role": "system", "content": personalized}])
