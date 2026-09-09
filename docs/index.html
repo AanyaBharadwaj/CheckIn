@@ -4,6 +4,13 @@
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-97GH0QVWXQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-97GH0QVWXQ');
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -2196,10 +2203,6 @@
         // =====================================================================
         // Google Analytics
         // =====================================================================
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-97GH0QVWXQ');
 
         // Track when the app is launched from the Home Screen (PWA)
         // Uses isStandalone variable from PWA install handler
